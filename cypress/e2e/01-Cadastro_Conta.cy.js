@@ -2,10 +2,10 @@
 describe('Cadastro de conta bancária', () => {
   
   beforeEach(() => {
-    cy.site(); 
-  });
+    cy.site()
+  })
   
-  it.only('Validar que os campos de cadastro existem', () => {
+  it('Validar que os campos de cadastro existem', () => {
 
     cy.get('#loginPanel > :nth-child(3) > a').click() //Clica em registrar
 
@@ -20,8 +20,6 @@ describe('Cadastro de conta bancária', () => {
     cy.contains('Username:').should('be.visible') //Nome de usuario
     cy.contains('Password:').should('be.visible') //Senha
     cy.contains('Confirm:').should('be.visible') //Confirmar senha
-
-    //cy.get('[colspan="2"] > .button').click() //Registrar
     
   });
   
@@ -40,8 +38,17 @@ describe('Cadastro de conta bancária', () => {
     cy.get('#customer\\.password').type('12345678') //Senha
     cy.get('#repeatedPassword').type('12345678') //Confirmar senha
 
-    //cy.get('[colspan="2"] > .button').click() //Registrar
-    
+    cy.get('[colspan="2"] > .button').click() //Registrar
+    cy.contains('Welcome TobiasG').should('be.visible') //Validar mensagem de bem vindo ao cadastro com sucesso
+    cy.get('#leftPanel > ul > :nth-child(2) > a').click()
+    cy.get('#showOverview > .title').contains('Accounts Overview');
+    cy.get('[align="right"] > b').contains('Total') //Disponivel 
+    cy.get(':nth-child(2) > b').should('exist')
+        .and('be.visible')
+        .invoke('text')
+        .then((accountNumber) => {
+    cy.log('Total da conta:', accountNumber);
+  });
   });
 
   it('Não é possivel cadastrar o mesmo usuarios ja cadastrado', () => {
@@ -59,14 +66,14 @@ describe('Cadastro de conta bancária', () => {
     cy.get('#customer\\.password').type('12345678') //Senha
     cy.get('#repeatedPassword').type('12345678') //Confirmar senha
 
-    //cy.get('[colspan="2"] > .button').click() //Registrar
-    //cy.get('#customer\\.username\\.errors').should('have.text', 'This username already exists.')
+    cy.get('[colspan="2"] > .button').click() //Registrar
+    cy.get('#customer\\.username\\.errors').should('have.text', 'This username already exists.')
 
     
   });
 
 
-   it('Validar mensagem de campo obrigatorio no cadastro', () => {
+   it('Validar mensagem de campo obrigatorio na tentativa de cadastro com campos vazios', () => {
 
     cy.get('#loginPanel > :nth-child(3) > a').click() //Clica em registrar
 
@@ -85,13 +92,55 @@ describe('Cadastro de conta bancária', () => {
     
   });
 
-  it('Validar limitação dos campos', () => {
+  /*it('Validar limitação dos campos', () => {
     
   });
 
   it('Os campos numericos como Zip Code, Phone e SSN só devem aceitar numero', () => {
     
+  });*/
+
+
+  it('Abrir uma nova conta para transferencia', () => {
+
+    cy.login()
+    //Criar nova conta
+    cy.get('#leftPanel > ul > :nth-child(1) > a').click()
+    cy.get('#type').select('1').wait(1000)
+    cy.get('#fromAccountId').select(0).wait(1000);
+    cy.get('form > div > .button').should('have.value', 'Open New Account').click()
+    cy.get('#openAccountResult > .title').should('have.text', 'Account Opened!')
+    cy.get(':nth-child(3) > b').should('have.text', 'Your new account number:')
+
+  })
+
+   it('Abrir uma nova conta', () => {
+
+    cy.get('#loginPanel > :nth-child(3) > a').click() //Clica em registrar
+    cy.get('#customer\\.firstName').type('Tobias') //Primeiro nome
+    cy.get('#customer\\.lastName').type('Gomes') //Sobre nome
+    cy.get('#customer\\.address\\.street').type('Rua centro') //Endereço
+    cy.get('#customer\\.address\\.city').type('Caninde') //Cidade
+    cy.get('#customer\\.address\\.state').type('Ceara') //Estado
+    cy.get('#customer\\.address\\.zipCode').type('62700000') //CEP
+    cy.get('#customer\\.phoneNumber').type('85992920101') //Telefone
+    cy.get('#customer\\.ssn').type('10102020303') //Numero social
+    cy.get('#customer\\.username').type('TobiasS') //Nome de usuario
+    cy.get('#customer\\.password').type('12345678') //Senha
+    cy.get('#repeatedPassword').type('12345678') //Confirmar senha
+
+    cy.get('[colspan="2"] > .button').click() //Registrar
+    cy.contains('Welcome TobiasS').should('be.visible') //Validar mensagem de bem vindo ao cadastro com sucesso
+    cy.get('#leftPanel > ul > :nth-child(2) > a').click()
+    cy.get('#showOverview > .title').contains('Accounts Overview');
+    cy.get('[align="right"] > b').contains('Total') //Disponivel 
+    cy.get(':nth-child(2) > b').should('exist')
+        .and('be.visible')
+        .invoke('text')
+        .then((accountNumber) => {
+    cy.log('Total da conta:', accountNumber);
   });
+  });
+  
 
-
-});
+})
