@@ -4,7 +4,7 @@ Cypress.Commands.add('site', () => {
 
 
 Cypress.Commands.add('login', () => {
-  cy.get(':nth-child(2) > .input').type('TobiasGGGS')
+  cy.get(':nth-child(2) > .input').type('TobiasG')
   cy.get(':nth-child(4) > .input').type('12345678')
   cy.get(':nth-child(5) > .button').click()
 })

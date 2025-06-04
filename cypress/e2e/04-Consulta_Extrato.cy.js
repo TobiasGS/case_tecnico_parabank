@@ -17,7 +17,7 @@ describe('Consultar Extrato da conta', () => {
             });
     })
 
-        it.only('Verificar o extrato de uma nova conta', () => {
+        it('Verificar o extrato de uma nova conta', () => {
 
         cy.get('tbody > :nth-child(1) > :nth-child(1) > a').click()
         cy.get('#accountDetails > .title').should('have.text', 'Account Details')

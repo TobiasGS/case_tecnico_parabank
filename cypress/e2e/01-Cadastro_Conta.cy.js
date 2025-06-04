@@ -21,7 +21,7 @@ describe('Cadastro de conta bancária', () => {
     cy.contains('Password:').should('be.visible') //Senha
     cy.contains('Confirm:').should('be.visible') //Confirmar senha
     
-  });
+  })
   
   it('Cadastro de uma nova conta com sucesso', () => {
 
@@ -48,8 +48,8 @@ describe('Cadastro de conta bancária', () => {
         .invoke('text')
         .then((accountNumber) => {
     cy.log('Total da conta:', accountNumber);
-  });
-  });
+  })
+  })
 
   it('Não é possivel cadastrar o mesmo usuarios ja cadastrado', () => {
 
@@ -70,7 +70,7 @@ describe('Cadastro de conta bancária', () => {
     cy.get('#customer\\.username\\.errors').should('have.text', 'This username already exists.')
 
     
-  });
+  })
 
 
    it('Validar mensagem de campo obrigatorio na tentativa de cadastro com campos vazios', () => {
@@ -90,16 +90,7 @@ describe('Cadastro de conta bancária', () => {
     cy.get('#customer\\.password\\.errors').should('have.text', 'Password is required.') //Senha
     cy.get('#repeatedPassword\\.errors').should('have.text', 'Password confirmation is required.') //Confirmar senha
     
-  });
-
-  /*it('Validar limitação dos campos', () => {
-    
-  });
-
-  it('Os campos numericos como Zip Code, Phone e SSN só devem aceitar numero', () => {
-    
-  });*/
-
+  })
 
   it('Abrir uma nova conta para transferencia', () => {
 
@@ -138,9 +129,17 @@ describe('Cadastro de conta bancária', () => {
         .and('be.visible')
         .invoke('text')
         .then((accountNumber) => {
-    cy.log('Total da conta:', accountNumber);
+    cy.log('Total da conta:', accountNumber)
   });
   });
   
+ /* Cenarios que poderiam ser implementados
+    
+    - Validar limitação dos campos
+    - Os campos numericos como Zip Code, Phone e SSN só devem aceitar numero
+    - Mascara "- e ." dos campos Phone, Zip Code
+
+    */
+
 
 })
