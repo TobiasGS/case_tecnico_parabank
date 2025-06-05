@@ -13,14 +13,22 @@ it('Realizar login com sucesso', () => {
 
 it('Realizar tentativa de login com dados invalidos', () => {
 
-    
-    cy.get(':nth-child(2) > .input').type('Teste123')
-    cy.get(':nth-child(4) > .input').type('12345678')
+    cy.get(':nth-child(2) > .input').type('ABCDEFG')
+    cy.get(':nth-child(4) > .input').type('ASDFET')
     cy.get(':nth-child(5) > .button').click()
     cy.get('.title').should('contain', 'Error!').and('be.visible')
-    cy.get('.error').should('contain', 'An internal error has occurred and has been logged.').and('be.visible')
+    cy.get('.error').should('contain', 'The username and password could not be verified.').and('be.visible')
     
 })
+
+it('Realizar tentativa de login com campos vazios', () => {
+
+    cy.get(':nth-child(5) > .button').click()
+    cy.get('.title').should('contain', 'Error!').and('be.visible')
+    cy.get('.error').should('have.text', 'Please enter a username and password.').and('be.visible')
+    
+})
+
 
 /*Cenarios que poderiam ser implementados
 

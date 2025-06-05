@@ -69,9 +69,7 @@ describe('Cadastro de conta bancária', () => {
     cy.get('[colspan="2"] > .button').click() //Registrar
     cy.get('#customer\\.username\\.errors').should('have.text', 'This username already exists.')
 
-    
   })
-
 
    it('Validar mensagem de campo obrigatorio na tentativa de cadastro com campos vazios', () => {
 
@@ -92,52 +90,62 @@ describe('Cadastro de conta bancária', () => {
     
   })
 
-  it('Abrir uma nova conta para transferencia', () => {
+  it('Abertura de nova conta para transferencia', () => {
 
     cy.login()
     //Criar nova conta
-    cy.get('#leftPanel > ul > :nth-child(1) > a').click()
-    cy.get('#type').select('1').wait(1000)
-    cy.get('#fromAccountId').select(0).wait(1000);
-    cy.get('form > div > .button').should('have.value', 'Open New Account').click()
-    cy.get('#openAccountResult > .title').should('have.text', 'Account Opened!')
+    cy.get('#leftPanel > ul > :nth-child(1) > a').click() //Abri nova conta
+    cy.get('#type').select('1').wait(1000) //Tipo de conta
+    cy.get('#fromAccountId').select(0).wait(1000); //Conta que sera realizado a transferencia
+    cy.get('form > div > .button').should('have.value', 'Open New Account').click() 
+    cy.get('#openAccountResult > .title').should('have.text', 'Account Opened!') //Conta aberta
     cy.get(':nth-child(3) > b').should('have.text', 'Your new account number:')
 
   })
 
-   it('Abrir uma nova conta', () => {
+  it('Abertura de contas com dados aleatorios', () => { 
 
-    cy.get('#loginPanel > :nth-child(3) > a').click() //Clica em registrar
-    cy.get('#customer\\.firstName').type('Tobias') //Primeiro nome
-    cy.get('#customer\\.lastName').type('Gomes') //Sobre nome
-    cy.get('#customer\\.address\\.street').type('Rua centro') //Endereço
-    cy.get('#customer\\.address\\.city').type('Caninde') //Cidade
-    cy.get('#customer\\.address\\.state').type('Ceara') //Estado
-    cy.get('#customer\\.address\\.zipCode').type('62700000') //CEP
-    cy.get('#customer\\.phoneNumber').type('85992920101') //Telefone
-    cy.get('#customer\\.ssn').type('10102020303') //Numero social
-    cy.get('#customer\\.username').type('TobiasS') //Nome de usuario
-    cy.get('#customer\\.password').type('12345678') //Senha
-    cy.get('#repeatedPassword').type('12345678') //Confirmar senha
+  cy.gerarDadosPessoais().then((dados) => {
+    const username = `${dados.nome}${Math.floor(Math.random() * 1000)}`
 
-    cy.get('[colspan="2"] > .button').click() //Registrar
-    cy.contains('Welcome TobiasS').should('be.visible') //Validar mensagem de bem vindo ao cadastro com sucesso
+    cy.get('#loginPanel > :nth-child(3) > a').click() // Clica em registrar
+    cy.get('#customer\\.firstName').type(dados.nome) // Primeiro nome
+    cy.get('#customer\\.lastName').type(dados.sobrenome) // Sobrenome
+    cy.get('#customer\\.address\\.street').type(dados.endereco) // Endereço
+    cy.get('#customer\\.address\\.city').type(dados.cidade) // Cidade
+    cy.get('#customer\\.address\\.state').type('Ceará') // Estado
+    cy.get('#customer\\.address\\.zipCode').type('62700000') // CEP
+    cy.get('#customer\\.phoneNumber').type('85992920101') // Telefone
+    cy.get('#customer\\.ssn').type('10102020303') // Numero social
+    cy.get('#customer\\.username').type(username) // Nome de usuário aleatório
+    cy.get('#customer\\.password').type('12345678') // Senha
+    cy.get('#repeatedPassword').type('12345678') // Confirmar senha
+
+    cy.get('[colspan="2"] > .button').click() // Registrar
+    cy.contains(`Welcome ${username}`).should('be.visible') // Validar mensagem
+
     cy.get('#leftPanel > ul > :nth-child(2) > a').click()
-    cy.get('#showOverview > .title').contains('Accounts Overview');
-    cy.get('[align="right"] > b').contains('Total') //Disponivel 
+    cy.get('#showOverview > .title').contains('Accounts Overview')
+    cy.get('[align="right"] > b').contains('Total')
+
     cy.get(':nth-child(2) > b').should('exist')
-        .and('be.visible')
-        .invoke('text')
-        .then((accountNumber) => {
-    cy.log('Total da conta:', accountNumber)
-  });
-  });
+      .and('be.visible')
+      .invoke('text')
+      .then((accountNumber) => {
+        cy.log('Total da conta:', accountNumber)
+      })
+      cy.log('Seu usuário:', username)
+  })
+})
+
   
  /* Cenarios que poderiam ser implementados
     
     - Validar limitação dos campos
     - Os campos numericos como Zip Code, Phone e SSN só devem aceitar numero
     - Mascara "- e ." dos campos Phone, Zip Code
+    - Validar que não é permitido caracteres invalidos 
+    - Abertura de contas para PJs
 
     */
 
