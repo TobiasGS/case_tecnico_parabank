@@ -9,7 +9,6 @@ Cypress.Commands.add('login', () => {
   cy.get(':nth-child(5) > .button').click()
 })
 
-
 Cypress.Commands.add('contaCorrente', () => {
 
     cy.get('#leftPanel > ul > :nth-child(3) > a').click() //Tranferencia
@@ -43,7 +42,26 @@ Cypress.Commands.add('contaPoupança', () => {
 
 })
 
+Cypress.Commands.add('emprestimo', (valorEmprestimo, valorEntrada) => {
 
+  cy.get('#leftPanel > ul > :nth-child(7) > a').click() //Emprestimo
+    cy.get('#amount').type(valorEmprestimo) //Valor do emprestimo
+    cy.get('#downPayment').type(valorEntrada) //Valor de entrada
+    cy.get('[colspan="2"] > .button').click() //Solicita o emprestimo
+    cy.get('#requestLoanResult > .title').should('contain', 'Loan Request Processed')
+    cy.get('#loanProviderName').should('contain', 'Jiffy Mortgage Solutions (JMS)')
+    
+})
+
+Cypress.Commands.add('ajustarPorcentagem', () => {
+  cy.get('.leftmenu > :nth-child(6) > a').click() //Para entrar na pagina administrativa
+  
+  cy.get('#loanProcessorThreshold').clear().type('20') //Ajustar % para 20%
+  cy.get('#adminForm > .button').click() //Confirmar
+  cy.get('.logo').click()
+
+
+})
 
 Cypress.Commands.add('gerarDadosPessoais', () => {
   const nomes = ['Ana', 'Carlos', 'Beatriz', 'Fernando', 'Lucas', 'Mariana', 'Paulo', 'Juliana', 'Tiago', 'Renata'];
