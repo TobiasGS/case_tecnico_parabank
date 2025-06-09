@@ -11,7 +11,7 @@ it('Realizar login com sucesso', () => {
 
 })
 
-it.only('Realizar tentativa de login com dados invalidos', () => {
+it('Realizar tentativa de login com dados invalidos', () => {
 
     cy.get(':nth-child(2) > .input').type('ABCDEFG')
     cy.get(':nth-child(4) > .input').type('ASDFET')

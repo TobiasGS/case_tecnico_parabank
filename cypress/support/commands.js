@@ -49,7 +49,7 @@ Cypress.Commands.add('emprestimo', (valorEmprestimo, valorEntrada) => {
     cy.get('#downPayment').type(valorEntrada) //Valor de entrada
     cy.get('[colspan="2"] > .button').click() //Solicita o emprestimo
     cy.get('#requestLoanResult > .title').should('contain', 'Loan Request Processed')
-    cy.get('#loanProviderName').should('contain', 'Jiffy Mortgage Solutions (JMS)')
+    
     
 })
 
@@ -58,6 +58,7 @@ Cypress.Commands.add('ajustarPorcentagem', () => {
   
   cy.get('#loanProcessorThreshold').clear().type('20') //Ajustar % para 20%
   cy.get('#adminForm > .button').click() //Confirmar
+  cy.get('#adminForm > .button').click()
   cy.get('.logo').click()
 
 

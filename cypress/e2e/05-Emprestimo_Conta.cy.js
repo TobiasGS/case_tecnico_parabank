@@ -8,18 +8,20 @@ describe('Solicitar emprestimo', () => {
 it('Validar solicitação de emprestimo aprovado com sucesso', () => {
 
     cy.get('#leftPanel > ul > :nth-child(7) > a').click() //Emprestimo
-    cy.get('#amount').type('103.33') //Valor do emprestimo
-    cy.get('#downPayment').type('30') //Valor de entrada
+    cy.get('#amount').type('100') //Valor do emprestimo
+    cy.get('#downPayment').type('20') //Valor de entrada
     cy.get('[colspan="2"] > .button').click() //Solicita o emprestimo
     cy.get('#requestLoanResult > .title').should('contain', 'Loan Request Processed')
+    cy.get('[colspan="2"] > .button')
     cy.get('#loanProviderName').should('contain', 'Jiffy Mortgage Solutions (JMS)')
+    
     cy.get('#loanStatus').should('contain', 'Approved')
     cy.get(':nth-child(2) > b').should('contain', 'Your new account number:')
 })
 
 it('Validar abertura de conta quando emprestimo aprovado', () => {
     
-    cy.emprestimo('1000.00', '312,01')
+    cy.emprestimo('100.00', '20')
     
     cy.get('#newAccountId').should('exist') //Verifico a nova conta aberta
         .and('be.visible')
@@ -31,7 +33,7 @@ it('Validar abertura de conta quando emprestimo aprovado', () => {
     cy.get('#accountDetails > .title').should('contain', 'Account Details')
     cy.get('#accountId').should('contain', accountNumber) //Valido que a conta aberta é a mesma apos emprestimo aprovado
     cy.get('#accountType').should('contain', 'LOAN') //Valido o tipo da conta
-    cy.get('#balance').should('contain', '$505.33')
+    cy.get('#balance').should('contain', '$100.00')
         })
     
     })
@@ -64,7 +66,6 @@ cy.get('#loanRequestDenied > .error').should('contain', 'We cannot grant a loan 
 
 /*Cenarios que poderiam ser aplicados
     - Não deveria ser possivel realizar emprestimo com valor negativo
+    - Validar qeu não seria possivel realizar emprestimo sem ter saldo na conta para entrada
 
-
-    OBS: 
 */

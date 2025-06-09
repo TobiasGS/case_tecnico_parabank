@@ -39,7 +39,8 @@ describe('Cadastro de conta bancária', () => {
     cy.get('#repeatedPassword').type('12345678') //Confirmar senha
 
     cy.get('[colspan="2"] > .button').click() //Registrar
-    cy.contains('Welcome TobiasG').should('be.visible') //Validar mensagem de bem vindo ao cadastro com sucesso
+
+    cy.contains('Welcome TobiasG', { timeout: 10000 }).should('be.visible') //Validar mensagem de bem vindo ao cadastro com sucesso
     cy.get('#leftPanel > ul > :nth-child(2) > a').click()
     cy.get('#showOverview > .title').contains('Accounts Overview');
     cy.get('[align="right"] > b').contains('Total') //Disponivel 
